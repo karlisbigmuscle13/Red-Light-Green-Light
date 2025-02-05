@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Red Light Green Light Game</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    #game-area {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      transition: background-color 0.5s;
+    }
+
+    #player {
+      width: 50px;
+      height: 50px;
+      background-color: blue;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+    }
+
+    #status {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-area">
+    <div id="status"></div>
+    <div id="player"></div>
+  </div>
+
+  <script>
+    const gameArea = document.getElementById('game-area');
+    const player = document.getElementById('player');
+    const statusText = document.getElementById('status');
+
+    let isGreen = false;
+    let playerX = 50;
+    let playerY = 50;
+
+    // Function to toggle between red and green light
+    function toggleLight() {
+      isGreen = !isGreen;
+      if (isGreen) {
+        gameArea.style.backgroundColor = 'green';
+        statusText.textContent = 'GO!';
+      } else {
+        gameArea.style.backgroundColor = 'red';
+        statusText.textContent = 'STOP!';
+      }
+    }
+
+    // Function to move the player
+    function movePlayer(event) {
+      if (!isGreen) return; // Don't move if the light is red
+
+      const speed = 10;
+      switch (event.key) {
+        case 'w':
+          playerY = Math.max(playerY - speed, 0);
+          break;
+        case 'a':
+          playerX = Math.max(playerX - speed, 0);
+          break;
+        case 's':
+          playerY = Math.min(playerY + speed, window.innerHeight - 50);
+          break;
+        case 'd':
+          playerX = Math.min(playerX + speed, window.innerWidth - 50);
+          break;
+      }
+      player.style.top = `${playerY}px`;
+      player.style.left = `${playerX}px`;
+    }
+
+    // Event listener for keydown events
+    document.addEventListener('keydown', movePlayer);
+
+    // Toggle light every 2 seconds
+    setInterval(toggleLight, 2000);
+  </script>
+</body>
+</html>
